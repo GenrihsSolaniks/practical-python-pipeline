@@ -39,7 +39,13 @@ jobs:
           path: python-greetings
 
       - name: Stop old service
-        run: pm2 delete greetings-app-dev || exit 0
+        shell: powershell
+        run: |
+          pm2 delete greetings-app-dev
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Service greetings-app-dev not found, continuing..."
+            exit 0
+          }
 
       - name: Start service
         working-directory: python-greetings
@@ -79,7 +85,14 @@ jobs:
           repository: mtararujs/python-greetings
           path: python-greetings
 
-      - run: pm2 delete greetings-app-stg || exit 0
+      - name: Stop old service
+        shell: powershell
+        run: |
+          pm2 delete greetings-app-stg
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Service greetings-app-stg not found, continuing..."
+            exit 0
+          }
 
       - name: Start service
         working-directory: python-greetings
@@ -115,7 +128,14 @@ jobs:
           repository: mtararujs/python-greetings
           path: python-greetings
 
-      - run: pm2 delete greetings-app-preprod || exit 0
+      - name: Stop old service
+        shell: powershell
+        run: |
+          pm2 delete greetings-app-preprod
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Service greetings-app-preprod not found, continuing..."
+            exit 0
+          }
 
       - working-directory: python-greetings
         run: pm2 start app.py --name greetings-app-preprod -- 7003
@@ -150,7 +170,14 @@ jobs:
           repository: mtararujs/python-greetings
           path: python-greetings
 
-      - run: pm2 delete greetings-app-prod || exit 0
+      - name: Stop old service
+        shell: powershell
+        run: |
+          pm2 delete greetings-app-prod
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Service greetings-app-prod not found, continuing..."
+            exit 0
+          }
 
       - working-directory: python-greetings
         run: pm2 start app.py --name greetings-app-prod -- 7004
