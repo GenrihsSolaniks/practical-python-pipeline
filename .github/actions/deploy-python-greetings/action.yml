@@ -40,9 +40,12 @@ runs:
       shell: powershell
       working-directory: ${{ inputs.service-path }}
       run: |
+        $pythonPath = Join-Path (Get-Location) "venv\Scripts\python.exe"
         Write-Host "Starting greetings-app-${{ inputs.environment-name }} on port ${{ inputs.port }}..."
+        Write-Host "Using interpreter: $pythonPath"
+
         $env:PORT="${{ inputs.port }}"
-        pm2 start app.py --name greetings-app-${{ inputs.environment-name }} --interpreter venv\Scripts\python.exe
+        pm2 start app.py --name greetings-app-${{ inputs.environment-name }} --interpreter "$pythonPath"
 
     - name: Show PM2 process list
       shell: powershell
