@@ -1,0 +1,174 @@
+name: Python Greetings Pipeline
+
+on:
+  push:
+
+jobs:
+
+  install-pip-deps:
+    runs-on: self-hosted
+    steps:
+      - name: Print stage
+        run: echo "Installing all required dependencies..."
+
+      - uses: actions/checkout@v4
+
+      - name: Clone python-greetings repo
+        uses: actions/checkout@v4
+        with:
+          repository: mtararujs/python-greetings
+          path: python-greetings
+
+      - name: Install dependencies
+        working-directory: python-greetings
+        run: |
+          python -m venv venv
+          .\venv\Scripts\python -m pip install -r requirements.txt
+
+  deploy-to-dev:
+    runs-on: self-hosted
+    needs: install-pip-deps
+    steps:
+      - run: echo "Deploying to DEV..."
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: mtararujs/python-greetings
+          path: python-greetings
+
+      - name: Stop old service
+        run: pm2 delete greetings-app-dev || exit 0
+
+      - name: Start service
+        working-directory: python-greetings
+        run: pm2 start app.py --name greetings-app-dev -- 7001
+
+  tests-on-dev:
+    runs-on: self-hosted
+    needs: deploy-to-dev
+    steps:
+      - run: echo "Running tests on DEV..."
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: mtararujs/course-js-api-framework
+          path: tests
+
+      - name: Install test deps
+        working-directory: tests
+        run: npm install
+
+      - name: Run tests
+        working-directory: tests
+        run: npm run greetings greetings_dev
+
+  deploy-to-stg:
+    runs-on: self-hosted
+    needs: tests-on-dev
+    steps:
+      - run: echo "Deploying to STG..."
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: mtararujs/python-greetings
+          path: python-greetings
+
+      - run: pm2 delete greetings-app-stg || exit 0
+
+      - name: Start service
+        working-directory: python-greetings
+        run: pm2 start app.py --name greetings-app-stg -- 7002
+
+  tests-on-stg:
+    runs-on: self-hosted
+    needs: deploy-to-stg
+    steps:
+      - run: echo "Running tests on STG..."
+
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: mtararujs/course-js-api-framework
+          path: tests
+
+      - working-directory: tests
+        run: npm install
+
+      - working-directory: tests
+        run: npm run greetings greetings_stg
+
+  deploy-to-preprod:
+    runs-on: self-hosted
+    needs: tests-on-stg
+    steps:
+      - run: echo "Deploying to PREPROD..."
+
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: mtararujs/python-greetings
+          path: python-greetings
+
+      - run: pm2 delete greetings-app-preprod || exit 0
+
+      - working-directory: python-greetings
+        run: pm2 start app.py --name greetings-app-preprod -- 7003
+
+  tests-on-preprod:
+    runs-on: self-hosted
+    needs: deploy-to-preprod
+    steps:
+      - run: echo "Running tests on PREPROD..."
+
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: mtararujs/course-js-api-framework
+          path: tests
+
+      - working-directory: tests
+        run: npm install
+
+      - working-directory: tests
+        run: npm run greetings greetings_preprod
+
+  deploy-to-prod:
+    runs-on: self-hosted
+    needs: tests-on-preprod
+    steps:
+      - run: echo "Deploying to PROD..."
+
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: mtararujs/python-greetings
+          path: python-greetings
+
+      - run: pm2 delete greetings-app-prod || exit 0
+
+      - working-directory: python-greetings
+        run: pm2 start app.py --name greetings-app-prod -- 7004
+
+  tests-on-prod:
+    runs-on: self-hosted
+    needs: deploy-to-prod
+    steps:
+      - run: echo "Running tests on PROD..."
+
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: mtararujs/course-js-api-framework
+          path: tests
+
+      - working-directory: tests
+        run: npm install
+
+      - working-directory: tests
+        run: npm run greetings greetings_prod
