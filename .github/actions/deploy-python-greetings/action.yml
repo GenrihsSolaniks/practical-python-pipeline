@@ -41,7 +41,8 @@ runs:
       working-directory: ${{ inputs.service-path }}
       run: |
         Write-Host "Starting greetings-app-${{ inputs.environment-name }} on port ${{ inputs.port }}..."
-        pm2 start app.py --name greetings-app-${{ inputs.environment-name }} --interpreter venv\Scripts\python.exe -- --port ${{ inputs.port }}
+        $env:PORT="${{ inputs.port }}"
+        pm2 start app.py --name greetings-app-${{ inputs.environment-name }} --interpreter venv\Scripts\python.exe
 
     - name: Show PM2 process list
       shell: powershell
