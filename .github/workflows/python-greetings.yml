@@ -10,12 +10,17 @@ jobs:
     steps:
       - name: Install pip dependencies stage
         run: echo "Installing all required dependencies..."
+
       - uses: actions/checkout@v4
+        with:
+          clean: false
+
       - name: Clone python-greetings repository
         uses: actions/checkout@v4
         with:
           repository: mtararujs/python-greetings
           path: python-greetings
+
       - name: Install Python dependencies
         uses: ./.github/actions/install-pip-deps
         with:
@@ -27,12 +32,17 @@ jobs:
     steps:
       - name: Deploy to dev stage
         run: echo "Deploying application to dev environment..."
+
       - uses: actions/checkout@v4
+        with:
+          clean: false
+
       - name: Clone python-greetings repository
         uses: actions/checkout@v4
         with:
           repository: mtararujs/python-greetings
           path: python-greetings
+
       - name: Deploy service to dev
         uses: ./.github/actions/deploy-python-greetings
         with:
@@ -46,12 +56,17 @@ jobs:
     steps:
       - name: Test on dev stage
         run: echo "Running API tests on dev environment..."
+
       - uses: actions/checkout@v4
+        with:
+          clean: false
+
       - name: Clone JS API framework repository
         uses: actions/checkout@v4
         with:
           repository: mtararujs/course-js-api-framework
           path: course-js-api-framework
+
       - name: Run dev tests
         uses: ./.github/actions/test-js-api
         with:
@@ -64,12 +79,17 @@ jobs:
     steps:
       - name: Deploy to stg stage
         run: echo "Deploying application to stg environment..."
+
       - uses: actions/checkout@v4
+        with:
+          clean: false
+
       - name: Clone python-greetings repository
         uses: actions/checkout@v4
         with:
           repository: mtararujs/python-greetings
           path: python-greetings
+
       - name: Deploy service to stg
         uses: ./.github/actions/deploy-python-greetings
         with:
@@ -83,12 +103,17 @@ jobs:
     steps:
       - name: Test on stg stage
         run: echo "Running API tests on stg environment..."
+
       - uses: actions/checkout@v4
+        with:
+          clean: false
+
       - name: Clone JS API framework repository
         uses: actions/checkout@v4
         with:
           repository: mtararujs/course-js-api-framework
           path: course-js-api-framework
+
       - name: Run stg tests
         uses: ./.github/actions/test-js-api
         with:
@@ -101,12 +126,17 @@ jobs:
     steps:
       - name: Deploy to preprod stage
         run: echo "Deploying application to preprod environment..."
+
       - uses: actions/checkout@v4
+        with:
+          clean: false
+
       - name: Clone python-greetings repository
         uses: actions/checkout@v4
         with:
           repository: mtararujs/python-greetings
           path: python-greetings
+
       - name: Deploy service to preprod
         uses: ./.github/actions/deploy-python-greetings
         with:
@@ -120,12 +150,17 @@ jobs:
     steps:
       - name: Test on preprod stage
         run: echo "Running API tests on preprod environment..."
+
       - uses: actions/checkout@v4
+        with:
+          clean: false
+
       - name: Clone JS API framework repository
         uses: actions/checkout@v4
         with:
           repository: mtararujs/course-js-api-framework
           path: course-js-api-framework
+
       - name: Run preprod tests
         uses: ./.github/actions/test-js-api
         with:
@@ -138,12 +173,17 @@ jobs:
     steps:
       - name: Deploy to prod stage
         run: echo "Deploying application to prod environment..."
+
       - uses: actions/checkout@v4
+        with:
+          clean: false
+
       - name: Clone python-greetings repository
         uses: actions/checkout@v4
         with:
           repository: mtararujs/python-greetings
           path: python-greetings
+
       - name: Deploy service to prod
         uses: ./.github/actions/deploy-python-greetings
         with:
@@ -157,12 +197,17 @@ jobs:
     steps:
       - name: Test on prod stage
         run: echo "Running API tests on prod environment..."
+
       - uses: actions/checkout@v4
+        with:
+          clean: false
+
       - name: Clone JS API framework repository
         uses: actions/checkout@v4
         with:
           repository: mtararujs/course-js-api-framework
           path: course-js-api-framework
+
       - name: Run prod tests
         uses: ./.github/actions/test-js-api
         with:
