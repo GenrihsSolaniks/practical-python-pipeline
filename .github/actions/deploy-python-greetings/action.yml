@@ -15,10 +15,30 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Prepare stable deploy directory
+      shell: powershell
+      run: |
+        $deployRoot = "C:\greetings-deploy"
+        $targetDir = Join-Path $deployRoot "${{ inputs.environment-name }}"
+
+        Write-Host "Preparing deploy directory: $targetDir"
+
+        if (!(Test-Path $deployRoot)) {
+          New-Item -ItemType Directory -Path $deployRoot | Out-Null
+        }
+
+        if (Test-Path $targetDir) {
+          Remove-Item -Recurse -Force $targetDir
+        }
+
+        Copy-Item -Recurse -Force "${{ inputs.service-path }}" $targetDir
+
     - name: Ensure venv exists and dependencies are installed
       shell: powershell
-      working-directory: ${{ inputs.service-path }}
       run: |
+        $targetDir = "C:\greetings-deploy\${{ inputs.environment-name }}"
+        Set-Location $targetDir
+
         Write-Host "Ensuring Python virtual environment exists..."
         python -m venv venv
 
@@ -38,14 +58,17 @@ runs:
 
     - name: Start service with PM2
       shell: powershell
-      working-directory: ${{ inputs.service-path }}
       run: |
-        $pythonPath = Join-Path (Get-Location) "venv\Scripts\python.exe"
+        $targetDir = "C:\greetings-deploy\${{ inputs.environment-name }}"
+        $pythonPath = Join-Path $targetDir "venv\Scripts\python.exe"
+        $appPath = Join-Path $targetDir "app.py"
+
         Write-Host "Starting greetings-app-${{ inputs.environment-name }} on port ${{ inputs.port }}..."
+        Write-Host "Using app: $appPath"
         Write-Host "Using interpreter: $pythonPath"
 
         $env:PORT="${{ inputs.port }}"
-        pm2 start app.py --name greetings-app-${{ inputs.environment-name }} --interpreter "$pythonPath"
+        pm2 start $appPath --name greetings-app-${{ inputs.environment-name }} --interpreter $pythonPath
 
     - name: Show PM2 process list
       shell: powershell

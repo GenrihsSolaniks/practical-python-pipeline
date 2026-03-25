@@ -11,9 +11,18 @@ jobs:
       - name: Install pip dependencies stage
         run: echo "Installing all required dependencies..."
 
-      - uses: actions/checkout@v4
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v4
         with:
           clean: false
+
+      - name: Cleanup old python-greetings folder
+        shell: powershell
+        run: |
+          if (Test-Path "python-greetings") {
+            Write-Host "Removing old python-greetings folder..."
+            Remove-Item -Recurse -Force "python-greetings"
+          }
 
       - name: Clone python-greetings repository
         uses: actions/checkout@v4
@@ -33,9 +42,18 @@ jobs:
       - name: Deploy to dev stage
         run: echo "Deploying application to dev environment..."
 
-      - uses: actions/checkout@v4
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v4
         with:
           clean: false
+
+      - name: Cleanup old python-greetings folder
+        shell: powershell
+        run: |
+          if (Test-Path "python-greetings") {
+            Write-Host "Removing old python-greetings folder..."
+            Remove-Item -Recurse -Force "python-greetings"
+          }
 
       - name: Clone python-greetings repository
         uses: actions/checkout@v4
@@ -57,9 +75,18 @@ jobs:
       - name: Test on dev stage
         run: echo "Running API tests on dev environment..."
 
-      - uses: actions/checkout@v4
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v4
         with:
           clean: false
+
+      - name: Cleanup old course-js-api-framework folder
+        shell: powershell
+        run: |
+          if (Test-Path "course-js-api-framework") {
+            Write-Host "Removing old course-js-api-framework folder..."
+            Remove-Item -Recurse -Force "course-js-api-framework"
+          }
 
       - name: Clone JS API framework repository
         uses: actions/checkout@v4
@@ -80,9 +107,18 @@ jobs:
       - name: Deploy to stg stage
         run: echo "Deploying application to stg environment..."
 
-      - uses: actions/checkout@v4
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v4
         with:
           clean: false
+
+      - name: Cleanup old python-greetings folder
+        shell: powershell
+        run: |
+          if (Test-Path "python-greetings") {
+            Write-Host "Removing old python-greetings folder..."
+            Remove-Item -Recurse -Force "python-greetings"
+          }
 
       - name: Clone python-greetings repository
         uses: actions/checkout@v4
@@ -104,9 +140,18 @@ jobs:
       - name: Test on stg stage
         run: echo "Running API tests on stg environment..."
 
-      - uses: actions/checkout@v4
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v4
         with:
           clean: false
+
+      - name: Cleanup old course-js-api-framework folder
+        shell: powershell
+        run: |
+          if (Test-Path "course-js-api-framework") {
+            Write-Host "Removing old course-js-api-framework folder..."
+            Remove-Item -Recurse -Force "course-js-api-framework"
+          }
 
       - name: Clone JS API framework repository
         uses: actions/checkout@v4
@@ -127,9 +172,18 @@ jobs:
       - name: Deploy to preprod stage
         run: echo "Deploying application to preprod environment..."
 
-      - uses: actions/checkout@v4
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v4
         with:
           clean: false
+
+      - name: Cleanup old python-greetings folder
+        shell: powershell
+        run: |
+          if (Test-Path "python-greetings") {
+            Write-Host "Removing old python-greetings folder..."
+            Remove-Item -Recurse -Force "python-greetings"
+          }
 
       - name: Clone python-greetings repository
         uses: actions/checkout@v4
@@ -151,9 +205,18 @@ jobs:
       - name: Test on preprod stage
         run: echo "Running API tests on preprod environment..."
 
-      - uses: actions/checkout@v4
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v4
         with:
           clean: false
+
+      - name: Cleanup old course-js-api-framework folder
+        shell: powershell
+        run: |
+          if (Test-Path "course-js-api-framework") {
+            Write-Host "Removing old course-js-api-framework folder..."
+            Remove-Item -Recurse -Force "course-js-api-framework"
+          }
 
       - name: Clone JS API framework repository
         uses: actions/checkout@v4
@@ -174,9 +237,18 @@ jobs:
       - name: Deploy to prod stage
         run: echo "Deploying application to prod environment..."
 
-      - uses: actions/checkout@v4
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v4
         with:
           clean: false
+
+      - name: Cleanup old python-greetings folder
+        shell: powershell
+        run: |
+          if (Test-Path "python-greetings") {
+            Write-Host "Removing old python-greetings folder..."
+            Remove-Item -Recurse -Force "python-greetings"
+          }
 
       - name: Clone python-greetings repository
         uses: actions/checkout@v4
@@ -198,9 +270,18 @@ jobs:
       - name: Test on prod stage
         run: echo "Running API tests on prod environment..."
 
-      - uses: actions/checkout@v4
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v4
         with:
           clean: false
+
+      - name: Cleanup old course-js-api-framework folder
+        shell: powershell
+        run: |
+          if (Test-Path "course-js-api-framework") {
+            Write-Host "Removing old course-js-api-framework folder..."
+            Remove-Item -Recurse -Force "course-js-api-framework"
+          }
 
       - name: Clone JS API framework repository
         uses: actions/checkout@v4
