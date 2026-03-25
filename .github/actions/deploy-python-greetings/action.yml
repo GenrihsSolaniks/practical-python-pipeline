@@ -1,0 +1,49 @@
+name: Deploy python greetings
+description: Stop existing PM2 process and start python-greetings on selected port
+
+inputs:
+  service-path:
+    description: Path to python-greetings repository
+    required: true
+  environment-name:
+    description: Environment name (dev/stg/preprod/prod)
+    required: true
+  port:
+    description: Port number
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Ensure venv exists and dependencies are installed
+      shell: powershell
+      working-directory: ${{ inputs.service-path }}
+      run: |
+        Write-Host "Ensuring Python virtual environment exists..."
+        python -m venv venv
+
+        Write-Host "Installing or refreshing Python dependencies..."
+        .\venv\Scripts\python.exe -m pip install --upgrade pip
+        .\venv\Scripts\python.exe -m pip install -r requirements.txt
+
+    - name: Stop old PM2 service if exists
+      shell: powershell
+      run: |
+        Write-Host "Stopping previous PM2 process greetings-app-${{ inputs.environment-name }} if it exists..."
+        pm2 delete greetings-app-${{ inputs.environment-name }}
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "Service greetings-app-${{ inputs.environment-name }} not found, continuing..."
+          exit 0
+        }
+
+    - name: Start service with PM2
+      shell: powershell
+      working-directory: ${{ inputs.service-path }}
+      run: |
+        Write-Host "Starting greetings-app-${{ inputs.environment-name }} on port ${{ inputs.port }}..."
+        pm2 start app.py --name greetings-app-${{ inputs.environment-name }} --interpreter venv\Scripts\python.exe -- --port ${{ inputs.port }}
+
+    - name: Show PM2 process list
+      shell: powershell
+      run: |
+        pm2 list

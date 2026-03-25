@@ -1,0 +1,27 @@
+name: Run JS API tests
+description: Install JS dependencies and run API tests for selected environment
+
+inputs:
+  tests-path:
+    description: Path to course-js-api-framework repository
+    required: true
+  environment-name:
+    description: Environment name (dev/stg/preprod/prod)
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Install npm dependencies
+      shell: powershell
+      working-directory: ${{ inputs.tests-path }}
+      run: |
+        Write-Host "Installing Node.js dependencies..."
+        npm install
+
+    - name: Run environment tests
+      shell: powershell
+      working-directory: ${{ inputs.tests-path }}
+      run: |
+        Write-Host "Running tests for environment ${{ inputs.environment-name }}..."
+        npm run greetings greetings_${{ inputs.environment-name }}
